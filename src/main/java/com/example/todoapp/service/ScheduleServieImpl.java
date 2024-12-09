@@ -25,6 +25,7 @@ public class ScheduleServieImpl implements ScheduleService{
         this.jdbcTemplate=jdbcTemplate;
     }
 
+    /*일정 저장*/
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto dto) {
         Schedule schedule=new Schedule(dto.getName(),dto.getDetails(), dto.getPassword());
@@ -32,12 +33,14 @@ public class ScheduleServieImpl implements ScheduleService{
         return scheduleRepository.saveSchedule(schedule);
     }
 
+    /*id에 맞는 일정 조회*/
     @Override
     public ScheduleResponseDto findScheduleById(Long scheduleId) {
         Schedule schedule=scheduleRepository.findScheduleByIdElseThrow(scheduleId);
         return new ScheduleResponseDto(schedule);
     }
 
+    /*조건에 맞는 일정 조회*/
     @Override
     public List<ScheduleResponseDto> findSchedule(LocalDate updatedDate, String name) {
         if(updatedDate==null && name==null) return scheduleRepository.findAllSchedules(); //전체 일정 조회
@@ -45,6 +48,7 @@ public class ScheduleServieImpl implements ScheduleService{
         return scheduleRepository.findSchedule(formattedDate, name); //특정 조건에 맞는 일정 조회
     }
 
+    /*작성자, 일정 모두 수정*/
     @Transactional
     @Override
     public ScheduleResponseDto updateWholeSchedule(Long scheduleId, String name, String password, String details) {
@@ -62,6 +66,7 @@ public class ScheduleServieImpl implements ScheduleService{
         return new ScheduleResponseDto(schedule);
     }
 
+    /*일정 수정*/
     @Transactional
     @Override
     public ScheduleResponseDto updateDetails(Long scheduleId, String name, String password, String details) {
@@ -79,6 +84,7 @@ public class ScheduleServieImpl implements ScheduleService{
         return new ScheduleResponseDto(schedule);
     }
 
+    /*작성자 수정*/
     @Transactional
     @Override
     public ScheduleResponseDto updateAuthor(Long scheduleId, String name, String password, String details) {
@@ -96,8 +102,12 @@ public class ScheduleServieImpl implements ScheduleService{
         return new ScheduleResponseDto(schedule);
     }
 
+    /*일정 삭제*/
     @Override
     public void deleteSchedule(Long scheduleId) {
-
+        int deleteRowNum=scheduleRepository.deleteSchedule(scheduleId);
+        if(deleteRowNum==0){ //삭제할 일정이 없는 경우
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The schedule dose not exist. id = "+scheduleId);
+        }
     }
 }

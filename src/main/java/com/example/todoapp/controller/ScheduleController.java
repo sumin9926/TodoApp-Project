@@ -20,11 +20,13 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
+    /*일정 추가*/
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto){
         return new ResponseEntity<>(scheduleService.saveSchedule(dto), HttpStatus.CREATED);
     }
 
+    /*id로 일정 조회*/
     @GetMapping("/{scheduleId}")
     public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long scheduleId){
         return new ResponseEntity<>(scheduleService.findScheduleById(scheduleId), HttpStatus.OK);
@@ -36,21 +38,25 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.findSchedule(updatedDate, name),HttpStatus.OK);
     }
 
+    /*작성자 수정*/
     @PatchMapping("/{scheduleId}/author")
     public ResponseEntity<ScheduleResponseDto> updateAuthor(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto dto){
         return new ResponseEntity<>(scheduleService.updateAuthor(scheduleId, dto.getName(), dto.getPassword(), dto.getDetails()),HttpStatus.OK);
     }
 
+    /*일정 내용 수정*/
     @PatchMapping("/{scheduleId}/details")
     public ResponseEntity<ScheduleResponseDto> updateDetails(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto dto){
         return new ResponseEntity<>(scheduleService.updateDetails(scheduleId, dto.getName(), dto.getPassword(), dto.getDetails()),HttpStatus.OK);
     }
 
+    /*작성자, 일정 수정*/
     @PutMapping("/{scheduleId}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto dto){
         return new ResponseEntity<>(scheduleService.updateWholeSchedule(scheduleId, dto.getName(), dto.getPassword(), dto.getDetails()),HttpStatus.OK);
     }
 
+    /*일정 삭제*/
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId){
         scheduleService.deleteSchedule(scheduleId);

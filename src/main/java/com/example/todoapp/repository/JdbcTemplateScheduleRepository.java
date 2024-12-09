@@ -32,13 +32,11 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-
+    /*DB에 일정 추가*/
     @Override
     public ScheduleResponseDto saveSchedule(Schedule schedule) {
         SimpleJdbcInsert jdbcInsert=new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName("schedule")
-              //  .usingColumns("name", "details","password","created_date","updated_date")
-                .usingGeneratedKeyColumns("schedule_id");
+        jdbcInsert.withTableName("schedule").usingGeneratedKeyColumns("schedule_id");
 
         Map<String, Object> parameters=new HashMap<>();
         parameters.put("name",schedule.getName());
@@ -53,17 +51,20 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
                                        schedule.getCreatedDate(),schedule.getUpdatedDate());
     }
 
+    /*DB에서 id로 일정 찾기*/
     @Override
     public Schedule findScheduleByIdElseThrow(Long scheduleId) {
         List<Schedule> findScheduleById=jdbcTemplate.query("select * from schedule where schedule_id= ?", scheduleRowMapper() ,scheduleId);
         return findScheduleById.stream().findAny().orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Dose not exists id="+scheduleId));
     }
 
+    /*DB의 모든 일정 반환*/
     @Override
     public List<ScheduleResponseDto> findAllSchedules() {
         return jdbcTemplate.query("select * from schedule", scheduleDtoRowMapper());
     }
 
+    /*DB에서 조건에 맞는 일정 찾기*/
     @Override
     public List<ScheduleResponseDto> findSchedule(String updatedDate, String name) {
         // 이름으로 조회
@@ -75,6 +76,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
         return jdbcTemplate.query("select * from schedule where name=? AND updated_date like ?", scheduleDtoRowMapper(), name, formattedDate);
     }
 
+    /*작성자, 일정 수정*/
     @Override
     public int updateWholeSchedule(Long scheduleId, String name, String password, String details) {
         int updateRowNum=0;
@@ -88,6 +90,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
         return updateRowNum;
     }
 
+    /*일정만 수정*/
     @Override
     public int updateDetails(Long scheduleId, String password, String details) {
         int updateRowNum=0;
@@ -101,6 +104,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
         return updateRowNum;
     }
 
+    /*작성자만 수정*/
     @Override
     public int updateAuthor(Long scheduleId, String name, String password) {
         int updateRowNum=0;
@@ -114,15 +118,18 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
         return updateRowNum;
     }
 
+    /*DB에서 일정 삭제*/
     @Override
     public int deleteSchedule(Long scheduleId) {
-        return 0;
+        return jdbcTemplate.update("delete from schedule where schedule_id=?", scheduleId);
     }
 
+    /*비밀번호 대조*/
     private boolean isTruePassword(Long id, String password){
         try{
+            //비밀번호 동일
             if(password.equals(jdbcTemplate.queryForObject("select password from schedule where schedule_id=?", String.class,id))) return true;
-            else return false;
+            else return false;//비밀번호 다름
         } catch (EmptyResultDataAccessException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The schedule dose not exist. id = "+id);
         } catch (IncorrectResultSizeDataAccessException e){
@@ -161,6 +168,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
         };
     }
 
+    /*TimeStamp를 ZonedDateTime으로 변환*/
     private ZonedDateTime toZonedDateTime(Timestamp timestamp) {
         return timestamp != null ? timestamp.toInstant().atZone(ZoneId.systemDefault()):null;
     }
