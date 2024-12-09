@@ -50,6 +50,7 @@ public class ScheduleServieImpl implements ScheduleService{
         return null;
     }
 
+    @Transactional
     @Override
     public ScheduleResponseDto updateDetails(Long scheduleId, String name, String password, String details) {
         if(name!=null||details==null||password==null){ //필수 정보 누락 혹은 불필요한 정보를 포함한 경우
