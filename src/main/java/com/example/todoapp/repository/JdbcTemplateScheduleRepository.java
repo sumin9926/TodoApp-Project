@@ -129,7 +129,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
         try{
             //비밀번호 동일
             if(password.equals(jdbcTemplate.queryForObject("select password from schedule where schedule_id=?", String.class,id))) return true;
-            else return false;//비밀번호 다름
+            else throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect password.");//비밀번호 다름
         } catch (EmptyResultDataAccessException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The schedule dose not exist. id = "+id);
         } catch (IncorrectResultSizeDataAccessException e){
