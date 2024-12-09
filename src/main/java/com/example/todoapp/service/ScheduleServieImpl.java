@@ -29,6 +29,12 @@ public class ScheduleServieImpl implements ScheduleService{
     }
 
     @Override
+    public ScheduleResponseDto findScheduleById(Long scheduleId) {
+        Schedule schedule=scheduleRepository.findScheduleByIdElseThrow(scheduleId);
+        return new ScheduleResponseDto(schedule);
+    }
+
+    @Override
     public List<ScheduleResponseDto> findAllSchedules() {
         return List.of();
     }

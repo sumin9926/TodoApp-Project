@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ScheduleService {
     ScheduleResponseDto saveSchedule(ScheduleRequestDto dto);
+    ScheduleResponseDto findScheduleById(Long scheduleId);
     List<ScheduleResponseDto> findAllSchedules();
     List<ScheduleResponseDto> findSchedule(ZonedDateTime updatedDate, String name);
     ScheduleResponseDto updateDetails(Long scheduleId, String name, String password, String details);

@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface ScheduleRepository {
     ScheduleResponseDto saveSchedule(Schedule schedule);
+    Schedule findScheduleByIdElseThrow(Long scheduleId);
     List<ScheduleResponseDto> findAllSchedules();
     List<ScheduleResponseDto> findSchedule(ZonedDateTime updatedDate, String name);
     int updateDetails(Long scheduleId, String name, String password, String details);

@@ -2,12 +2,19 @@ package com.example.todoapp.repository;
 
 import com.example.todoapp.dto.ScheduleResponseDto;
 import com.example.todoapp.entity.Schedule;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +50,12 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
     }
 
     @Override
+    public Schedule findScheduleByIdElseThrow(Long scheduleId) {
+        List<Schedule> findScheduleById=jdbcTemplate.query("select * from schedule where schedule_id= ?", scheduleRowMapper() ,scheduleId);
+        return findScheduleById.stream().findAny().orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Dose not exists id="+scheduleId));
+    }
+
+    @Override
     public List<ScheduleResponseDto> findAllSchedules() {
         return List.of();
     }
@@ -70,5 +83,25 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
     @Override
     public int deleteSchedule(Long scheduleId) {
         return 0;
+    }
+
+    private RowMapper<Schedule> scheduleRowMapper(){
+        return new RowMapper<Schedule>() {
+            @Override
+            public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new Schedule(
+                        rs.getLong("schedule_id"),
+                        rs.getString("name"),
+                        rs.getString("password"),
+                        rs.getString("details"),
+                        toZonedDateTime(rs.getTimestamp("created_date")),
+                        toZonedDateTime(rs.getTimestamp("updated_date"))
+                );
+            }
+        };
+    }
+
+    private ZonedDateTime toZonedDateTime(Timestamp timestamp) {
+        return timestamp != null ? timestamp.toInstant().atZone(ZoneId.systemDefault()):null;
     }
 }
