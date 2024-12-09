@@ -12,9 +12,9 @@ public interface ScheduleRepository {
     Schedule findScheduleByIdElseThrow(Long scheduleId);
     List<ScheduleResponseDto> findAllSchedules();
     List<ScheduleResponseDto> findSchedule(String formattedUpdatedDate, String name);
-    int updateDetails(Long scheduleId, String name, String password, String details);
+    int updateDetails(Long scheduleId, String password, String details);
     int updateWholeSchedule(Long scheduleId, String name, String password, String details);
-    int updateAuthor(Long scheduleId, String name, String password, String details);
+    int updateAuthor(Long scheduleId, String name, String password);
     int deleteSchedule(Long scheduleId);
 
 }

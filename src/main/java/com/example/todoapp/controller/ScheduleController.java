@@ -30,9 +30,14 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.findScheduleById(scheduleId), HttpStatus.OK);
     }
 
-    /*조건에 맞는 일정 조회 1.param 2.pathVariable / Get, Delet에서는 Body를 사용하지 않는다.*/
+    /*조건에 맞는 일정 조회*/
     @GetMapping
     public ResponseEntity<List<ScheduleResponseDto>> findSchedule(@RequestParam(required = false) LocalDate updatedDate, @RequestParam(required = false) String name){
         return new ResponseEntity<>(scheduleService.findSchedule(updatedDate, name),HttpStatus.OK);
+    }
+
+    @PatchMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleResponseDto> updateAuthor(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto dto){
+        return new ResponseEntity<>(scheduleService.updateAuthor(scheduleId, dto.getName(), dto.getPassword(), dto.getDetails()),HttpStatus.OK);
     }
 }

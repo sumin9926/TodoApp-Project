@@ -10,6 +10,6 @@ public class ScheduleRequestDto {
     private String details;
     private String password;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate updatedDate;
+/*    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate updatedDate;*/
 }
