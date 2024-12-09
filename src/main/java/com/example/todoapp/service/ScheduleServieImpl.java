@@ -104,8 +104,8 @@ public class ScheduleServieImpl implements ScheduleService{
 
     /*일정 삭제*/
     @Override
-    public void deleteSchedule(Long scheduleId) {
-        int deleteRowNum=scheduleRepository.deleteSchedule(scheduleId);
+    public void deleteSchedule(Long scheduleId, String password) {
+        int deleteRowNum=scheduleRepository.deleteSchedule(scheduleId, password);
         if(deleteRowNum==0){ //삭제할 일정이 없는 경우
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The schedule dose not exist. id = "+scheduleId);
         }

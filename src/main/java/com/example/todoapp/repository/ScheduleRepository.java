@@ -15,6 +15,6 @@ public interface ScheduleRepository {
     int updateDetails(Long scheduleId, String password, String details);
     int updateWholeSchedule(Long scheduleId, String name, String password, String details);
     int updateAuthor(Long scheduleId, String name, String password);
-    int deleteSchedule(Long scheduleId);
+    int deleteSchedule(Long scheduleId, String password);
 
 }

@@ -13,5 +13,5 @@ public interface ScheduleService {
     ScheduleResponseDto updateDetails(Long scheduleId, String name, String password, String details);
     ScheduleResponseDto updateWholeSchedule(Long scheduleId, String name, String password, String details);
     ScheduleResponseDto updateAuthor(Long scheduleId, String name, String password, String details);
-    void deleteSchedule(Long scheduleId);
+    void deleteSchedule(Long scheduleId, String password);
 }

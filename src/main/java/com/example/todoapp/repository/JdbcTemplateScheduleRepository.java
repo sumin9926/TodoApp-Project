@@ -120,8 +120,11 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
 
     /*DB에서 일정 삭제*/
     @Override
-    public int deleteSchedule(Long scheduleId) {
-        return jdbcTemplate.update("delete from schedule where schedule_id=?", scheduleId);
+    public int deleteSchedule(Long scheduleId, String password) {
+        if(isTruePassword(scheduleId,password)){
+            return jdbcTemplate.update("delete from schedule where schedule_id=?", scheduleId);
+        }
+        else return 0;
     }
 
     /*비밀번호 대조*/
