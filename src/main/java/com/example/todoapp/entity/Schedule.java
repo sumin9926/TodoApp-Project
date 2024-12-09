@@ -14,12 +14,13 @@ public class Schedule {
     private String password;
     private String details;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private ZonedDateTime createdDate;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private ZonedDateTime updatedDate;
 
+    //새로운 일정 생성시 사용
     public Schedule(String name, String details, String password){
         this.name=name;
         this.details=details;

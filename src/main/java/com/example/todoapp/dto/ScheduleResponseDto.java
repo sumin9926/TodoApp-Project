@@ -12,10 +12,10 @@ public class ScheduleResponseDto {
     private Long scheduleId;
     private String name;
     private String details;
-    @JsonFormat(pattern = "YYYY-MM-DD hh:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private ZonedDateTime createdDate;
 
-    @JsonFormat(pattern = "YYYY-MM-DD hh:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private ZonedDateTime updatedDate;
 
     public ScheduleResponseDto(Schedule schedule){
