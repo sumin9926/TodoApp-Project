@@ -45,9 +45,21 @@ public class ScheduleServieImpl implements ScheduleService{
         return scheduleRepository.findSchedule(formattedDate, name); //특정 조건에 맞는 일정 조회
     }
 
+    @Transactional
     @Override
     public ScheduleResponseDto updateWholeSchedule(Long scheduleId, String name, String password, String details) {
-        return null;
+        if(name==null||details==null||password==null){ //필수 정보 누락 확인
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The name, details and password are required.");
+        }
+
+        int updatedRowNum=scheduleRepository.updateWholeSchedule(scheduleId,name,password,details);
+        if(updatedRowNum==0){//변경하려는 일정이 존재하지 않을 경우
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The schedule dose not exist. id = "+scheduleId);
+        }
+
+        Schedule schedule=scheduleRepository.findScheduleByIdElseThrow(scheduleId);
+
+        return new ScheduleResponseDto(schedule);
     }
 
     @Transactional

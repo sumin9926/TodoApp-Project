@@ -45,4 +45,15 @@ public class ScheduleController {
     public ResponseEntity<ScheduleResponseDto> updateDetails(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto dto){
         return new ResponseEntity<>(scheduleService.updateDetails(scheduleId, dto.getName(), dto.getPassword(), dto.getDetails()),HttpStatus.OK);
     }
+
+    @PutMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto dto){
+        return new ResponseEntity<>(scheduleService.updateWholeSchedule(scheduleId, dto.getName(), dto.getPassword(), dto.getDetails()),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId){
+        scheduleService.deleteSchedule(scheduleId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

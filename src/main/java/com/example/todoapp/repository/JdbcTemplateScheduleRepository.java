@@ -77,7 +77,15 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
 
     @Override
     public int updateWholeSchedule(Long scheduleId, String name, String password, String details) {
-        return 0;
+        int updateRowNum=0;
+
+        //수정시간 갱신
+        Timestamp updatedDate=Timestamp.from(ZonedDateTime.now().toInstant());
+
+        if(isTruePassword(scheduleId,password)) {
+            updateRowNum=jdbcTemplate.update("update schedule set name=?, details=?, updated_date=? where schedule_id=?", name, details, updatedDate, scheduleId);
+        }
+        return updateRowNum;
     }
 
     @Override
