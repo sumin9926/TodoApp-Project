@@ -33,7 +33,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
     public ScheduleResponseDto saveSchedule(Schedule schedule) {
         SimpleJdbcInsert jdbcInsert=new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("schedule")
-                .usingColumns("name", "details","password","created_date","updated_date")
+              //  .usingColumns("name", "details","password","created_date","updated_date")
                 .usingGeneratedKeyColumns("schedule_id");
 
         Map<String, Object> parameters=new HashMap<>();
@@ -57,12 +57,18 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
 
     @Override
     public List<ScheduleResponseDto> findAllSchedules() {
-        return List.of();
+        return jdbcTemplate.query("select * from schedule", scheduleDtoRowMapper());
     }
 
     @Override
-    public List<ScheduleResponseDto> findSchedule(ZonedDateTime updatedDate, String name) {
-        return List.of();
+    public List<ScheduleResponseDto> findSchedule(String updatedDate, String name) {
+        String formattedDate=updatedDate+"%";
+        // 이름으로 조회
+        if(name!=null&&updatedDate==null) return jdbcTemplate.query("select * from schedule where name like ?",scheduleDtoRowMapper(),name);
+        // 수정일로 조회
+        if(updatedDate!=null&&name==null) return jdbcTemplate.query("select * from schedule where updated_date like ?",scheduleDtoRowMapper(),formattedDate);
+        //이름, 수정일로 조회
+        return jdbcTemplate.query("select * from schedule where name like ? AND updated_date like ?", scheduleDtoRowMapper(), name, formattedDate);
     }
 
     @Override
@@ -83,6 +89,21 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
     @Override
     public int deleteSchedule(Long scheduleId) {
         return 0;
+    }
+
+    private RowMapper<ScheduleResponseDto> scheduleDtoRowMapper(){
+        return new RowMapper<ScheduleResponseDto>() {
+            @Override
+            public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new ScheduleResponseDto(
+                        rs.getLong("schedule_id"),
+                        rs.getString("name"),
+                        rs.getString("details"),
+                        toZonedDateTime(rs.getTimestamp("created_date")),
+                        toZonedDateTime(rs.getTimestamp("updated_date"))
+                );
+            }
+        };
     }
 
     private RowMapper<Schedule> scheduleRowMapper(){

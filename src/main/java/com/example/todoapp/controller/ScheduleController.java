@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/schedules")
 public class ScheduleController {
@@ -25,5 +28,11 @@ public class ScheduleController {
     @GetMapping("/{scheduleId}")
     public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long scheduleId){
         return new ResponseEntity<>(scheduleService.findScheduleById(scheduleId), HttpStatus.OK);
+    }
+
+    /*조건에 맞는 일정 조회 1.param 2.pathVariable / Get, Delet에서는 Body를 사용하지 않는다.*/
+    @GetMapping
+    public ResponseEntity<List<ScheduleResponseDto>> findSchedule(@RequestParam(required = false) LocalDate updatedDate, @RequestParam(required = false) String name){
+        return new ResponseEntity<>(scheduleService.findSchedule(updatedDate, name),HttpStatus.OK);
     }
 }

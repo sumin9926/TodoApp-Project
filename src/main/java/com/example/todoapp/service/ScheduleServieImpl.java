@@ -7,6 +7,7 @@ import com.example.todoapp.repository.ScheduleRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -35,13 +36,9 @@ public class ScheduleServieImpl implements ScheduleService{
     }
 
     @Override
-    public List<ScheduleResponseDto> findAllSchedules() {
-        return List.of();
-    }
-
-    @Override
-    public List<ScheduleResponseDto> findSchedule(ZonedDateTime updatedDate, String name) {
-        return null;
+    public List<ScheduleResponseDto> findSchedule(LocalDate updatedDate, String name) {
+        if(updatedDate==null && name==null) return scheduleRepository.findAllSchedules(); //전체 일정 조회
+        return scheduleRepository.findSchedule(String.valueOf(updatedDate), name); //특정 조건에 맞는 일정 조회
     }
 
     @Override
