@@ -68,12 +68,12 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
     @Override
     public List<ScheduleResponseDto> findSchedule(String updatedDate, String name) {
         // 이름으로 조회
-        if(name!=null&&updatedDate==null) return jdbcTemplate.query("select * from schedule where name=?",scheduleDtoRowMapper(),name);
+        if(name!=null&&updatedDate==null) return jdbcTemplate.query("select * from schedule where name=? order by updated_date desc",scheduleDtoRowMapper(),name);
         // 수정일로 조회
         String formattedDate=updatedDate+"%";
-        if(updatedDate!=null&&name==null) return jdbcTemplate.query("select * from schedule where updated_date like ?",scheduleDtoRowMapper(),formattedDate);
+        if(updatedDate!=null&&name==null) return jdbcTemplate.query("select * from schedule where updated_date like ? order by updated_date desc",scheduleDtoRowMapper(),formattedDate);
         //이름, 수정일로 조회
-        return jdbcTemplate.query("select * from schedule where name=? AND updated_date like ?", scheduleDtoRowMapper(), name, formattedDate);
+        return jdbcTemplate.query("select * from schedule where name=? AND updated_date like ? order by updated_date desc", scheduleDtoRowMapper(), name, formattedDate);
     }
 
     /*작성자, 일정 수정*/
