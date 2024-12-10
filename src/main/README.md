@@ -1,7 +1,7 @@
 #  🗓️ 일정 관리 API 만들기
 ## ❔프로젝트 정보
 - JDBC, 3 Layer Architecture를 사용하여 CRUD 연습을 위해 진행한 '일정 관리 API 만들기' 과제입니다.<br>
-  이 프로젝트는 사용자가 일정을 추가, 조회, 수정, 삭제할 수 있는 API를 제공하며, 비밀번호 확인 기능을 통해 일정 삭제 시 보안을 강화하였습니다.
+  이 프로젝트는 사용자가 일정을 추가, 조회, 수정, 삭제할 수 있는 API를 제공하며, 비밀번호 확인 기능을 통해 일정 삭제 및 수정 시 보안을 강화하였습니다.
 - **개발기간**: 24.12.06~24.12.10
 
 ## 🔧사용 기술
@@ -39,4 +39,19 @@
 | 일정 작성자명 수정   | PATCH  | /api/schedules/{schedule_id}/author         | {<br>“name”: “작성자 수정”,<br>“password”: “1234”<br>} | {<br>“scheduleId”: “1”,<br>“name”: “작성자 수정”,<br>“details”: “초코비 먹기”,<br>“created_date”: “yyyy-mm-dd”,<br>“updated_date”: “yyyy-mm-dd”<br>} | //수정 성공<br>200 OK<br><br>//일정 조회 실패<br>404 Not Found<br><br>//비밀번호 불일치<br>400 Bad Request |
 | 일정 삭제        | DELETE | /api/schedules/{schedule_id}/?password=1234 |                                                                     |              | //삭제 성공<br>200 OK<br><br>//일정 조회 실패<br>404 Not Found<br><br>//비밀번호 불일치<br>400 Bad Request |
 
-## ➕부가 설명
+## 🗂️ DB 테이블 설명
+
+### Table: schedule
+
+- 설명: 사용자의 일정 정보를 저장하는 테이블
+- 컬럼:
+  - ```schedule_id```: 일정 고유 식별자 (PRIMARY KEY)
+  - ```name```: 작성자 이름 (VARCHAR(20))
+  - ```details```: 일정 내용 (VARCHAR(200))
+  - ```password```: 비밀번호 (VARCHAR(50))
+  - ```created_date```: 작성일 (TIMESTAMP)
+  - ```updated_date```: 수정일 (TIMESTAMP)
+
+### 부가 설명
+- 일정 내용 입력은 200자로 제한됩니다.
+- 작성자 이름, 일정 내용, 비밀번호는 필수값 입니다.
