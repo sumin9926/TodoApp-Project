@@ -23,10 +23,10 @@
 - 구현은 Lv2 까지 하였으나 ERD는 Lv3 까지 그려보았습니다.
 
 ### Lv2 ERD
-<img src="./src/main/images/LV2 ERD.png" width="130">
+<img src="./src/main/images/LV2 ERD.png" width="150">
 
 ### Lv3 ERD
-<img src="./src/main/images/Lv3%20ERD.png" width="330">
+<img src="./src/main/images/Lv3%20ERD.png" width="360">
 
 ## 🧾API 명세서
 | 기능           | Method | URL                                         | Request                                                             | Response                                                                                                                                                                                                                                                                                | Status                                                                                    |
