@@ -26,7 +26,7 @@
 <img src="./images/LV2 ERD.png" width="130">
 
 ### Lv3 ERD
-<img src="./images/LV3 ERD.png" width="330">
+<img src="./images/Lv3%20ERD.png" width="330">
 
 ## 🧾API 명세서
 | 기능           | Method | URL                                         | Request                                                             | Response                                                                                                                                                                                                                                                                                | Status                                                                                    |
